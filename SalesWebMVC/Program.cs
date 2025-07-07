@@ -14,8 +14,9 @@ builder.Services.AddDbContext<SalesWebMVCContext>(options =>
       .GetConnectionString("SalesWebMVCContext"))));
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddTransient<SeedingService>();
-builder.Services.AddTransient<SellerService>();
+builder.Services.AddScoped<SeedingService>();
+builder.Services.AddScoped<SellerService>();
+builder.Services.AddScoped<DepartmentService>();
 
 var app = builder.Build();
 
