@@ -9,7 +9,7 @@ public class Seller
     public double BaseSalary { get; set; }
 
     public int? DepartmentId { get; set; }
-    public Department? Department { get; set; }
+    public Department Department { get; set; }
     public ICollection<SalesRecord> Sales { get; set; } = new List<SalesRecord>();
 
 
@@ -17,7 +17,7 @@ public class Seller
     {
     }
 
-    public Seller(int id, string? name, string? email, DateTime birthDay, double baseSalary, Department? department)
+    public Seller(int id, string? name, string? email, DateTime birthDay, double baseSalary, Department department)
     {
         Id = id;
         Name = name;
