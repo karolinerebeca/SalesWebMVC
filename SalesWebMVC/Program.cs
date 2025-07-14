@@ -1,47 +1,49 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Localization;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Localization;
 using SalesWebMVC.Data;
 using SalesWebMVC.Services;
+using System.Configuration;
 using System.Globalization;
+
 
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Configuração do contexto de banco de dados
 builder.Services.AddDbContext<SalesWebMVCContext>(options =>
-    options.UseMySql(builder
-      .Configuration
-      .GetConnectionString("SalesWebMVCContext"),
-      ServerVersion.AutoDetect(builder
-      .Configuration
-      .GetConnectionString("SalesWebMVCContext"))));
-// Add services to the container.
-builder.Services.AddControllersWithViews();
+    options.UseMySql(
+        builder.Configuration.GetConnectionString("SalesWebMVCContext"),
+        ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("SalesWebMVCContext"))
+    ));
+
+
 builder.Services.AddScoped<SeedingService>();
 builder.Services.AddScoped<SellerService>();
 builder.Services.AddScoped<DepartmentService>();
+builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-
-var enUS = new CultureInfo("en-US");
+// 🌍 Configuração de cultura pt-BR
+var ptBR = new CultureInfo("pt-BR");
 var localizationOptions = new RequestLocalizationOptions
 {
-    DefaultRequestCulture = new RequestCulture(enUS),
-    SupportedCultures = new List<CultureInfo> { enUS },
-    SupportedUICultures = new List<CultureInfo> { enUS }
+    DefaultRequestCulture = new RequestCulture(ptBR),
+    SupportedCultures = new List<CultureInfo> { ptBR },
+    SupportedUICultures = new List<CultureInfo> { ptBR }
 };
+
 app.UseRequestLocalization(localizationOptions);
+
+// Configuração do pipeline HTTP
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
-
 else
-{   
+{
     using (var scope = app.Services.CreateScope())
     {
         var services = scope.ServiceProvider;
@@ -51,15 +53,14 @@ else
     }
 }
 
-    app.UseHttpsRedirection();
+app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Sellers}/{action=Index}/{id?}");
 
 app.Run();

@@ -1,4 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace SalesWebMVC.Models;
 
@@ -26,20 +29,19 @@ public class Seller
     [Required(ErrorMessage = "{0} required")]
     [Range(100.0, 50000.0, ErrorMessage = "{0} must be between {1} and {2}")]
     [Display(Name = "Base Salary")]
-    [DisplayFormat(DataFormatString = "{0:F2}")]
+    [DisplayFormat(DataFormatString = "{0:F2}", ApplyFormatInEditMode = true)]
     public double BaseSalary { get; set; }
 
-
+    public Department? Department { get; set; }
     public int DepartmentId { get; set; }
-    public Department Department { get; set; }
+    
+
     public ICollection<SalesRecord> Sales { get; set; } = new List<SalesRecord>();
 
 
-    public Seller() 
-    {
-    }
+    public Seller() { }
 
-    public Seller(int id, string name, string email, DateTime birthDay, double baseSalary, Department department)
+    public Seller(int id, string name, string email, DateTime birthDay, double baseSalary, Department? department)
     {
         Id = id;
         Name = name;
