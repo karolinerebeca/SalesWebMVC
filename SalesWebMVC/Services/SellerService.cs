@@ -43,7 +43,7 @@ namespace SalesWebMVC.Services
 
             catch (DbUpdateException e)
             {
-                throw new IntegrityException(e.Message);
+                throw new IntegrityException("Can't delete seller because he/she has");
             }
         }
         public async Task UpdateAsync(Seller obj)

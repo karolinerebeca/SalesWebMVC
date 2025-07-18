@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using SalesWebMvc.Services;
 using SalesWebMVC.Data;
 using SalesWebMVC.Services;
 using System.Configuration;
@@ -22,6 +23,7 @@ builder.Services.AddScoped<SeedingService>();
 builder.Services.AddScoped<SellerService>();
 builder.Services.AddScoped<DepartmentService>();
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<SalesRecordService>();
 
 var app = builder.Build();
 
@@ -30,8 +32,8 @@ var ptBR = new CultureInfo("pt-BR");
 var localizationOptions = new RequestLocalizationOptions
 {
     DefaultRequestCulture = new RequestCulture(ptBR),
-    SupportedCultures = new List<CultureInfo> { ptBR },
-    SupportedUICultures = new List<CultureInfo> { ptBR }
+    SupportedCultures = [ptBR],
+    SupportedUICultures =  [ptBR]
 };
 
 app.UseRequestLocalization(localizationOptions);
@@ -44,7 +46,7 @@ if (!app.Environment.IsDevelopment())
 }
 else
 {
-    using (var scope = app.Services.CreateScope())
+    using var scope = app.Services.CreateScope();
     {
         var services = scope.ServiceProvider;
         var context = services.GetRequiredService<SalesWebMVCContext>();

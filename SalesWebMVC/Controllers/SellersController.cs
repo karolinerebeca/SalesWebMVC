@@ -103,7 +103,7 @@ namespace SalesWebMVC.Controllers
             }
 
             List<Department> departments = await _departmentService.FindAllAsync();
-            SellerFormViewModel viewModel = new SellerFormViewModel { Seller = obj, Departments = departments };
+            SellerFormViewModel viewModel = new() { Seller = obj, Departments = departments };
             return View(viewModel);
         }
 
